@@ -16,8 +16,7 @@ $collectionName = "mcvt_down";
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script type="text/javascript" src="only_two2.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
     <body>
         <div class="container">
@@ -52,24 +51,9 @@ $collectionName = "mcvt_down";
                 * Для сравнения можно отметить только две версии конфигурации. Это
                 жесткое правило которое не стоит нарушать.
             </div>
-            <!--<div class="alert alert-info">-->
-                <?php
-                /*$json = $new_search->getJSONString();
-                echo '<pre>';
-                var_dump($json);
-                echo '</pre>';
-                
-                $json_str = json_encode($json);
-                echo '<pre>';
-                var_dump($json_str);
-                echo '</pre>';*/
-                ?>
-            <!--</div>-->
         </div>
         
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
