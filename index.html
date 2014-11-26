@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>SwitchConfig</title>
+        <!-- JQuery -->
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <!-- Datepicker -->
+        <link id="bsdp-css" href="bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+        <script src="bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+        <script src="bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js" charset="UTF-8"></script>        
+        <style>
+            .right .github-fork-ribbon {
+                background-color: #f80;
+            }
+        </style>
+        <link rel="stylesheet" href="css/gh-fork-ribbon.css">
+    </head>
+    <body>
+        <div class="github-fork-ribbon-wrapper right">
+            <div class="github-fork-ribbon">
+                <a href="https://github.com/MXMP/switch-config">View code on GitHub</a>
+            </div>
+        </div>    
+        <div class="container">
+            <h1>
+                <span class="glyphicon glyphicon-fire"></span> Сервис 
+                динамической конфигурации коммутаторов D-Link.
+            </h1>
+            <p>
+                Сервис позволяет получить информацию о том, когда и какой
+                конфигурационный файл был загружен в коммутатор. Поиск можно
+                выполнить путем ввода в поле ниже ip-адреса коммутатора либо, 
+                так называемого, хэша конфигурационного файла. Также можно
+                воспользоваться поиском загрузок за конкретную дату.
+            </p>
+            <p>
+                Еще один вариант поиска - указание диапазона дат. Соответственно
+                будут выведены все коммутаторы, в которые осуществлялась 
+                загрузка в указанный период.
+            </p>
+            <p>
+                Have fun!
+            </p>
+            <form action="mongo.php" method="post" role="search" class="form-inline" >
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="panel panel-primary">
+                                    <div class="panel-body">
+                                        <input class="form-control" type="radio" name="searchMethod" value="ipHash">
+                                        <input type="text" name="search_input" placeholder="ip-адрес или хэш" class="form-control" size="32">
+                                    </div>
+                                    <div class="panel-footer">
+                                        <strong>Поиск по ip или hash</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="panel panel-success">
+                                    <div class="panel-body">
+                                        <input class="form-control" type="radio" name="searchMethod" value="oneDay">
+                                        <div class="input-group date" id="datepickerOneDay">
+                                            <input type="text" class="form-control" name="oneDayDate" readonly />
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-th"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <strong>Поиск за один день</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="panel panel-info">
+                                    <div class="panel-body">
+                                        <input class="form-control" type="radio" name="searchMethod" value="dateRange">
+                                        <div class="input-group input-daterange" id="datepickerRange">
+                                            <input type="text"  class="form-control" name="dateRangeStart" readonly />
+                                            <span class="input-group-addon">до</span>
+                                            <input type="text"  class="form-control" name="dateRangeEnd" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <strong>Поиск за диапазон дат</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <button class="btn btn-primary btn-large btn-block" type="submit">Go!</button>
+                </div>
+            </form>
+            <p class="text-muted text-center"><span class="glyphicon glyphicon-copyright-mark"></span> MXMP, 2014</p>
+            <!-- Script for DatePicker -->
+            <script>
+                $('.input-group.date').datepicker({
+                    format: "dd.mm.yyyy",
+                    todayBtn: "linked",
+                    language: "ru",
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                $('.input-daterange').datepicker({
+                    format: "dd.mm.yyyy",
+                    todayBtn: "linked",
+                    language: "ru",
+                    autoclose: true,
+                    todayHighlight: true
+                });                
+            </script>
+            
+        </div>
+        
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>
