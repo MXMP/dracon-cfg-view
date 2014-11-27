@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>SwitchConfig</title>
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <!-- Datepicker -->
-        <link id="bsdp-css" href="bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">    
-    </head>
-    <body>   
-        <div class="container">
-            <h1>
-                <span class="glyphicon glyphicon-fire"></span> Сервис 
-                динамической конфигурации коммутаторов D-Link.
-            </h1>
+<?php require_once 'header.php'; ?>
+
+            <link id="bsdp-css" href="bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+
             <p>
                 Сервис позволяет получить информацию о том, когда и какой
                 конфигурационный файл был загружен в коммутатор. Поиск можно
@@ -27,9 +14,7 @@
                 будут выведены все коммутаторы, в которые осуществлялась 
                 загрузка в указанный период.
             </p>
-            <p>
-                Have fun!
-            </p>
+            <p>Have fun!</p>
             <form action="mongo.php" method="post" role="search" class="form-inline" >
                 <div class="container">
                     <div class="row">
@@ -87,16 +72,10 @@
                     <button class="btn btn-primary btn-large btn-block" type="submit">Go!</button>
                 </div>
             </form>
-            <p class="text-muted text-center"><span class="glyphicon glyphicon-copyright-mark"></span> MXMP, 2014</p>                        
-        </div>
-        
-        <!-- jQuery -->
-        <script src="js/jquery.min.js"></script>
-        <!-- Latest compiled and minified JavaScript for Bootstrap -->
-        <script src="js/bootstrap.min.js"></script>
+
         <!-- JavaScript for DatePicker -->
         <script src="bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js" charset="UTF-8"></script>
         <script src="js/datePicker_main.js"></script>
-    </body>
-</html>
+            
+<?php require_once 'footer.php'; ?>

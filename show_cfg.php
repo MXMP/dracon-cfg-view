@@ -1,6 +1,5 @@
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<div class="container">
 <?php
+require_once 'header.php';
 require_once 'AppSettings.php';
 
 // получаем настройки приложения
@@ -21,5 +20,5 @@ $cursor = $collection->find($query, $fields)->limit(1);
 foreach ($cursor as $document) {
     echo "<pre>".$document["config"]->bin."</pre>";;
 } 
-?>
-</div>
+
+require_once 'footer.php';
