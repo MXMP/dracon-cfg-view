@@ -2,11 +2,13 @@
 require_once 'search.php';
 require_once 'errorManager.php';
 require_once 'validationManager.php';
+require_once 'AppSettings.php';
 
-// Объявления вспомогательных переменных
-$dbHost = "10.200.201.180";
-$dbName = "mcvt";
-$collectionName = "mcvt_down";
+// получаем настройки приложения
+$AppSettings = AppSettings::getInstance();
+$dbHost           = $AppSettings->get('dbHost');
+$dbName           = $AppSettings->get('dbName');
+$dbCollectionName = $AppSettings->get('dbCollectionName');
 ?>
 
 <!DOCTYPE html>
@@ -36,9 +38,9 @@ $collectionName = "mcvt_down";
             // Попытка выполнения ранее подготовленного запроса
             $flag = $validator->getSearchFlag();
             if ($flag == "dateRange") {                
-                $new_search = new Search($dbHost, $dbName, $collectionName, $flag, $validator->getSearchStr(), $validator->getSearchStr2());
+                $new_search = new Search($dbHost, $dbName, $dbCollectionName, $flag, $validator->getSearchStr(), $validator->getSearchStr2());
             } else {
-                $new_search = new Search($dbHost, $dbName, $collectionName, $flag, $validator->getSearchStr());
+                $new_search = new Search($dbHost, $dbName, $dbCollectionName, $flag, $validator->getSearchStr());
             }
             $new_search->getResultsTable("diff.php");
             
