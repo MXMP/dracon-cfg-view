@@ -43,10 +43,6 @@ $dbCollectionName = $AppSettings->get('dbCollectionName');
                 $new_search = new Search($dbHost, $dbName, $dbCollectionName, $flag, $validator->getSearchStr());
             }
             $new_search->getResultsTable("diff.php");
-            
-            // Подсчет посетителей
-            $visitor_ip = $_SERVER['REMOTE_ADDR'];
-            file_put_contents("visitors.txt", $visitor_ip." :: ".date("d.m.Y H:i:s")."\r", FILE_APPEND);
             ?>
             
             <div class="alert alert-warning" role="alert">

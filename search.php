@@ -161,27 +161,4 @@ class Search {
             $this->errors[] = "Не передано обязательное действие.";
         }
     }
-    
-    public function getJSONString() {
-        if (empty($this->errors)) {
-            if ($this->cursor->count() != 0) {
-                $i = 1;
-                foreach ($this->cursor as $res) {
-                    $arr["Result".$i] = ["ip" => long2ip($res['ip']),
-                              "date" => date('Y-m-d H:i:s', $res["date"]),
-                              "hash" => $res['hash']];
-                    $i += 1;
-                }
-            } else {
-                $arr["Result"] = "По вашему запросу ничего не найдено.";
-            }
-        } else {
-            $e = 1;
-            foreach ($this->errors as $err) {
-                $arr["Error".$e] = $err;
-                $e += 1;
-            }
-        }
-        return $arr;
-    }
 }

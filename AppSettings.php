@@ -21,8 +21,8 @@ class AppSettings {
     }
     
     public function get($val) {
-        if (in_array($val, $this->settings)) {
-            return $this->settings[$val];
+        if (array_key_exists($val, $this->settings)) {
+            return $this->settings[$val];            
         }
     }
 }

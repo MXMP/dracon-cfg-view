@@ -1,14 +1,19 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <div class="container">
 <?php
-$input_hash = $_GET["hash"];
-$dbhost = '10.200.201.180';
-$dbname = 'mcvt';
-$collection_name = "mcvt_down";
+require_once 'AppSettings.php';
 
-$server = new MongoClient("mongodb://{$dbhost}");
-$db = $server->$dbname;
-$collection = $db->$collection_name;
+// получаем настройки приложения
+$AppSettings = AppSettings::getInstance();
+$dbHost           = $AppSettings->get('dbHost');
+$dbName           = $AppSettings->get('dbName');
+$dbCollectionName = $AppSettings->get('dbCollectionName');
+
+$input_hash = $_GET["hash"];
+
+$server = new MongoClient("mongodb://{$dbHost}");
+$db = $server->$dbName;
+$collection = $db->$dbCollectionName;
 $fields = array('hash' => true, 'config' => true);
 $query = array('hash' => $input_hash);
 $cursor = $collection->find($query, $fields)->limit(1);

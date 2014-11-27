@@ -10,6 +10,13 @@
         <div class="container">
 	<?php
 	    include 'finediff.php';
+            require_once 'AppSettings.php';
+
+            // получаем настройки приложения
+            $AppSettings = AppSettings::getInstance();
+            $dbHost           = $AppSettings->get('dbHost');
+            $dbName           = $AppSettings->get('dbName');
+            $dbCollectionName = $AppSettings->get('dbCollectionName');
             
             if (empty($_POST["hash"])) {
                 echo "Скрипту не передано никаких параметров!";
@@ -23,39 +30,24 @@
                     $hash2 = $_POST["hash"][1];
                 }
             }
-            
-            $dbhost = '10.200.201.180';
-            $dbname = 'mcvt';
-            $collection_name = "mcvt_down";
 
-            $server = new MongoClient("mongodb://{$dbhost}");
-            $db = $server->$dbname;
-            $collection = $db->$collection_name;
+            $server = new MongoClient("mongodb://{$dbHost}");
+            $db = $server->$dbName;
+            $collection = $db->$dbCollectionName;
             $fields = array('hash' => true, 'config' => true);
             $query = array('hash' => $hash1);
             $cursor = $collection->find($query, $fields)->limit(1);
 
             foreach ($cursor as $document) {
-                //echo "<pre>".$document["config"]->bin."</pre>";
                 $from_text = $document["config"]->bin;
             } 
-            
-            //echo "<h1>----------------------------------------------------------------------------------</h1>";
-            
+                        
             $query = array('hash' => $hash2);
             $cursor = $collection->find($query, $fields)->limit(1);
 
             foreach ($cursor as $document) {
-                //echo "<pre>".$document["config"]->bin."</pre>";
                 $to_text = $document["config"]->bin;
             } 
-
-            //echo "<h1>+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</h1>";
-            
-            /*
-            $from_text = file_get_contents('diff_from.txt');
-	    $to_text = file_get_contents('diff_to.txt');
-            */
             
 	    $opcodes = FineDiff::getDiffOpcodes($from_text, $to_text, FineDiff::$paragraphGranularity);
 	    $to_text = FineDiff::renderDiffToHTMLFromOpcodes($from_text, $opcodes);
