@@ -1,16 +1,12 @@
 <?php
-require_once '../view/generalHeader.php';
-require_once 'AppSettings.php';
+require_once 'view/generalHeader.php';
+require_once 'core/AppSettings.php';
 
 // получаем настройки приложения
 $AppSettings = AppSettings::getInstance();
 $dbHost           = $AppSettings->get('dbHost');
 $dbName           = $AppSettings->get('dbName');
 $dbCollectionName = $AppSettings->get('dbCollectionName');
-
-echo $dbHost;
-echo $dbName;
-echo $dbCollectionName;
 
 $input_hash = $_GET["hash"];
 

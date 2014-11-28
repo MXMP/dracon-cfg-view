@@ -134,7 +134,7 @@ class Search {
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
     }
     
-    public function getResultsTable($formAction = "core/Diff.php") {
+    public function getResultsTable($formAction = "Diff.php") {
         if ($this->cursor->count() != 0) {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
@@ -145,7 +145,7 @@ class Search {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
                 echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
-                echo "<td><a href=core/ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                echo "<td><a href=ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
                 echo '<td align="center"><input type=checkbox name= hash[] value='.$document["hash"].' /></td></tr>';
             }            
             echo '<tr><td colspan="4" align="right"><input type="submit" 

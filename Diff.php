@@ -1,10 +1,10 @@
-<?php require_once '../view/generalHeader.php'; ?>
+<?php require_once 'view/generalHeader.php'; ?>
 
-<link rel="stylesheet" type="text/css" href="../css/diff.css">
+<link rel="stylesheet" type="text/css" href="css/diff.css">
 
 <?php
-require_once 'modules/FineDiff.php';
-require_once 'AppSettings.php';
+require_once 'core/modules/FineDiff.php';
+require_once 'core/AppSettings.php';
 
 // получаем настройки приложения
 $AppSettings = AppSettings::getInstance();
@@ -50,4 +50,4 @@ echo "<pre>";
 echo $to_text;
 echo "</pre>";
 
-require_once '../view/generalFooter.php';
+require_once 'view/generalFooter.php';
