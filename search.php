@@ -150,10 +150,14 @@ class Search {
             }            
             echo '<tr><td colspan="4" align="right"><input type="submit" 
                 class="btn btn-default" value="Сравнить" name="make_diff" 
-                disabled="true" /></td></tr></table></div></form>';
+                disabled="true" /></td></tr></table></div></form><script 
+                type="text/javascript" src="only_two2.js"></script><div 
+                class="alert alert-warning" role="alert">* Для сравнения можно 
+                отметить только две версии конфигурации. Это жесткое правило 
+                которое не стоит нарушать.</div>';            
         } else {
             echo '<div class="alert alert-danger" role="alert">По вашему 
-                запросу ничего не найдено. <a href="index.html" 
+                запросу ничего не найдено. <a href="index.php" 
                 class="alert-link">Повторите поиск.</a></div>';
         }
     }
