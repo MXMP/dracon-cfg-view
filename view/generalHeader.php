@@ -14,6 +14,6 @@
     <body>   
         <div class="container">
             <h1>
-                <span class="glyphicon glyphicon-fire"></span> Сервис 
+                <a href="index.php"><span class="glyphicon glyphicon-fire"></span></a> Сервис 
                 динамической конфигурации коммутаторов D-Link.
             </h1>

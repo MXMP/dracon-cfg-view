@@ -1,5 +1,5 @@
 <?php
-require_once 'unixDateRange.php';
+require_once 'core/unixDateRange.php';
 
 class Search {
     private $cursor;
@@ -134,7 +134,7 @@ class Search {
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
     }
     
-    public function getResultsTable($formAction = "diff.php") {
+    public function getResultsTable($formAction = "core/Diff.php") {
         if ($this->cursor->count() != 0) {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
@@ -145,13 +145,13 @@ class Search {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
                 echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
-                echo "<td><a href=show_cfg.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                echo "<td><a href=core/ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
                 echo '<td align="center"><input type=checkbox name= hash[] value='.$document["hash"].' /></td></tr>';
             }            
             echo '<tr><td colspan="4" align="right"><input type="submit" 
-                class="btn btn-default" value="Сравнить" name="make_diff" 
+                class="btn btn-primary" value="Сравнить" name="make_diff" 
                 disabled="true" /></td></tr></table></div></form><script 
-                type="text/javascript" src="only_two2.js"></script><div 
+                type="text/javascript" src="js/only_two2.js"></script><div 
                 class="alert alert-info" role="alert">* Для сравнения можно 
                 отметить только две версии конфигурации. Это жесткое правило 
                 которое не стоит нарушать.</div>';            

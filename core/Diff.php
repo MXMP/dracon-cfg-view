@@ -1,9 +1,9 @@
-<?php require_once 'view/generalHeader.php'; ?>
+<?php require_once '../view/generalHeader.php'; ?>
 
-<link rel="stylesheet" type="text/css" href="css/diff.css">
+<link rel="stylesheet" type="text/css" href="../css/diff.css">
 
 <?php
-require_once 'finediff.php';
+require_once 'modules/FineDiff.php';
 require_once 'AppSettings.php';
 
 // получаем настройки приложения
@@ -50,4 +50,4 @@ echo "<pre>";
 echo $to_text;
 echo "</pre>";
 
-require_once 'view/generalFooter.php';
+require_once '../view/generalFooter.php';

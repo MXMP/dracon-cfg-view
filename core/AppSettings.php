@@ -1,7 +1,7 @@
 <?php
 class AppSettings {
     protected static $_instance;
-    private $file = "config.ini"; // имя файла с настройками
+    private $file = "../config.ini"; // имя файла с настройками
     private $settings = array();
     
     private function __construct() {

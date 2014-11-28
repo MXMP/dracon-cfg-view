@@ -1,10 +1,10 @@
 <?php
 require_once 'view/generalHeader.php';
 
-require_once 'AppExceptions.php';
-require_once 'search.php';
-require_once 'validationManager.php';
-require_once 'AppSettings.php';
+require_once 'core/AppExceptions.php';
+require_once 'core/Search.php';
+require_once 'core/validationManager.php';
+require_once 'core/AppSettings.php';
 
 // получаем настройки приложения
 $AppSettings = AppSettings::getInstance();
