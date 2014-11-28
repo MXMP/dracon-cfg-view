@@ -1,5 +1,5 @@
 <?php
-require_once 'unixDateRange.php';
+require_once 'core/unixDateRange.php';
 
 class Search {
     private $cursor;
@@ -134,54 +134,31 @@ class Search {
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
     }
     
-    public function getResultsTable($formAction) {
-        if (!is_null($formAction) || $formAction != "") {
-            if ($this->cursor->count() != 0) {
-                echo '<form action="'.$formAction.'" method="post"><div 
-                    class="panel panel-default"><div class="panel-heading">
-                    Результаты поиска (последние '.  $this->limitResults.')</div><table 
-                    class="table table-hover"><tr><th>ip-адрес</th><th>Дата загрузки</th>
-                    <th>Хэш</th><th>Сравнение*</th></tr><tr>';
-                foreach($this->cursor as $document) {
-                    $ip = long2ip($document["ip"]);
-                    echo "<td><a href=telnet://".$ip.">".$ip."</td>";
-                    echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
-                    echo "<td><a href=show_cfg.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
-                    echo '<td align="center"><input type=checkbox name= hash[] value='.$document["hash"].' /></td></tr>';
-                }            
-                echo '<tr><td colspan="4" align="right"><input type="submit" 
-                    class="btn btn-default" value="Сравнить" name="make_diff" 
-                    disabled="true" /></td></tr></table></div></form>';
-            } else {
-                echo '<div class="alert alert-danger" role="alert">По вашему 
-                    запросу ничего не найдено. <a href="index.html" 
-                    class="alert-link">Повторите поиск.</a></div>';
-            }
+    public function getResultsTable($formAction = "Diff.php") {
+        if ($this->cursor->count() != 0) {
+            echo '<form action="'.$formAction.'" method="post"><div 
+                class="panel panel-default"><div class="panel-heading">
+                Результаты поиска (последние '.  $this->limitResults.')</div><table 
+                class="table table-hover"><tr><th>ip-адрес</th><th>Дата загрузки</th>
+                <th>Хэш</th><th>Сравнение*</th></tr><tr>';
+            foreach($this->cursor as $document) {
+                $ip = long2ip($document["ip"]);
+                echo "<td><a href=telnet://".$ip.">".$ip."</td>";
+                echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
+                echo "<td><a href=ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                echo '<td align="center"><input type=checkbox name= hash[] value='.$document["hash"].' /></td></tr>';
+            }            
+            echo '<tr><td colspan="4" align="right"><input type="submit" 
+                class="btn btn-primary" value="Сравнить" name="make_diff" 
+                disabled="true" /></td></tr></table></div></form><script 
+                type="text/javascript" src="js/only_two2.js"></script><div 
+                class="alert alert-info" role="alert">* Для сравнения можно 
+                отметить только две версии конфигурации. Это жесткое правило 
+                которое не стоит нарушать.</div>';            
         } else {
-            $this->errors[] = "Не передано обязательное действие.";
+            echo '<div class="alert alert-warning" role="alert">По вашему 
+                запросу ничего не найдено. <a href="index.php" 
+                class="alert-link">Повторите поиск.</a></div>';
         }
-    }
-    
-    public function getJSONString() {
-        if (empty($this->errors)) {
-            if ($this->cursor->count() != 0) {
-                $i = 1;
-                foreach ($this->cursor as $res) {
-                    $arr["Result".$i] = ["ip" => long2ip($res['ip']),
-                              "date" => date('Y-m-d H:i:s', $res["date"]),
-                              "hash" => $res['hash']];
-                    $i += 1;
-                }
-            } else {
-                $arr["Result"] = "По вашему запросу ничего не найдено.";
-            }
-        } else {
-            $e = 1;
-            foreach ($this->errors as $err) {
-                $arr["Error".$e] = $err;
-                $e += 1;
-            }
-        }
-        return $arr;
     }
 }
