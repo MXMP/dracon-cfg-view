@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php';
+require_once 'view/generalHeader.php';
 
 require_once 'AppExceptions.php';
 require_once 'search.php';
@@ -28,16 +28,7 @@ try {
     }
     $new_search->getResultsTable();    
 } catch (AppBaseException $ex) {
-    echo '<div class="panel panel-danger">'
-            .'<div class="panel-heading">'
-                .'<h3 class="panel-title">'
-                    .'<span class="glyphicon glyphicon-warning-sign"></span> Ошибка!'
-                .'</h3>'
-            .'</div>'
-            .'<div class="panel-body">'
-                .$ex->getMessage().' <a href="index.php">На главную.</a>'
-            .'</div>'
-         .'</div>';
+    $ex->getHtmlPanel();
 }
 
-require_once 'footer.php';
+require_once 'view/generalFooter.php';

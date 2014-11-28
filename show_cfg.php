@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php';
+require_once 'view/generalHeader.php';
 require_once 'AppSettings.php';
 
 // получаем настройки приложения
@@ -21,4 +21,4 @@ foreach ($cursor as $document) {
     echo "<pre>".$document["config"]->bin."</pre>";;
 } 
 
-require_once 'footer.php';
+require_once 'view/generalFooter.php';

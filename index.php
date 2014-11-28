@@ -1,4 +1,4 @@
-<?php require_once 'header.php'; ?>
+<?php require_once 'view/generalHeader.php'; ?>
 
             <link id="bsdp-css" href="bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
 
@@ -78,4 +78,4 @@
         <script src="bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js" charset="UTF-8"></script>
         <script src="js/datePicker_main.js"></script>
             
-<?php require_once 'footer.php'; ?>
+<?php require_once 'view/generalFooter.php'; ?>

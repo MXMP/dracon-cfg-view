@@ -1,4 +1,4 @@
-<?php require_once 'header.php'; ?>
+<?php require_once 'view/generalHeader.php'; ?>
 
 <link rel="stylesheet" type="text/css" href="css/diff.css">
 
@@ -50,4 +50,4 @@ echo "<pre>";
 echo $to_text;
 echo "</pre>";
 
-require_once 'footer.php';
+require_once 'view/generalFooter.php';
