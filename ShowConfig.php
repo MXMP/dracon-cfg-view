@@ -6,11 +6,19 @@ require_once 'core/AppSettings.php';
 $AppSettings = AppSettings::getInstance();
 $dbHost           = $AppSettings->get('dbHost');
 $dbName           = $AppSettings->get('dbName');
+$dbUser		  = $AppSettings->get('dbUser');
+$dbPassword	  = $AppSettings->get('dbPassword');
+
 $dbCollectionName = $AppSettings->get('dbCollectionName');
 
 $input_hash = $_GET["hash"];
 
-$server = new MongoClient("mongodb://{$dbHost}");
+try {
+    $server = new MongoClient("mongodb://{$dbHost}", array("db" => $dbName, "username" => $dbUser, "password" => $dbPassword));
+} catch (MongoConnectionException $ex) {
+    echo $ex->getMessage();
+}
+
 $db = $server->$dbName;
 $collection = $db->$dbCollectionName;
 $fields = array('hash' => true, 'config' => true);
@@ -19,6 +27,6 @@ $cursor = $collection->find($query, $fields)->limit(1);
 
 foreach ($cursor as $document) {
     echo "<pre>".$document["config"]->bin."</pre>";;
-} 
+}
 
-require_once '../view/generalFooter.php';
+require_once 'view/generalFooter.php';

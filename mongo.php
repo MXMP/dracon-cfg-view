@@ -10,6 +10,8 @@ require_once 'core/AppSettings.php';
 $AppSettings = AppSettings::getInstance();
 $dbHost           = $AppSettings->get('dbHost');
 $dbName           = $AppSettings->get('dbName');
+$dbUser		  = $AppSettings->get('dbUser');
+$dbPassword	  = $AppSettings->get('dbPassword');
 $dbCollectionName = $AppSettings->get('dbCollectionName');
 
 try {
@@ -20,10 +22,10 @@ try {
     // Попытка выполнения ранее подготовленного запроса
     $flag = $validator->getSearchFlag();
     if ($flag == "dateRange") {                
-        $new_search = new Search($dbHost, $dbName, $dbCollectionName, $flag, 
+        $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                 $validator->getSearchStr(), $validator->getSearchStr2());
     } else {
-        $new_search = new Search($dbHost, $dbName, $dbCollectionName, $flag, 
+        $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                 $validator->getSearchStr());
     }
     $new_search->getResultsTable();    

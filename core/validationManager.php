@@ -39,6 +39,7 @@ class validationManager {
 
         // Получаем входную строку и тут же очищаем ее от всяких примесей,
         $clear_str = filter_input(INPUT_POST, "search_input", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$this->search_str = $clear_str;
 
         // анализируем строку и пытаемся выяснить по чему искать
         // проверка на пустую строку

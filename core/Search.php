@@ -33,84 +33,72 @@ class Search {
     }
     
     private function setDBHost($dbHost) {
-        /**
-         * @todo Сделать валидацию вводных данных, а то некрасиво как-то
-         */
-        // Просто устанавливаем это поле.
-        // Не производим валидацию принятых данных (надеемся на
-        // честность и аккуратность пользователя)
         $this->dbHost = $dbHost;
     }
-    
+
     public function getDBHost() {
         // Просто возвращаем хост базы данных.
         // Данное поле всегда будет содержать какие-то данные, т.к. без хоста
         // класс не будет создан (не отработает конструктор).
         return $this->dbHost;
     }
-            
+
     private function setDBName($dbName) {
         /**
          * @todo Сделать валидацию вводных данных, а то некрасиво как-то
          */
         // Просто устанавливаем это поле.
         // Не производим валидацию принятых данных (надеемся на
-        // честность и аккуратность пользователя)
+        // честность и аккуратность пользователя);
         $this->dbName = $dbName;
     }
-    
+
     public function getDBName() {
         // Просто возвращаем имя базы данных.
         // Данное поле всегда будет содержать какие-то данные, т.к. без имени
         // класс не будет создан (не отработает конструктор).
         return $this->dbName;
     }    
-    
+
     private function setCollectionName($collectionName) {
-        /**
-         * @todo Сделать валидацию вводных данных, а то некрасиво как-то
-         */
-        // Просто устанавливаем это поле.
-        // Не производим валидацию принятых данных (надеемся на
-        // честность и аккуратность пользователя)
-        $this->collectionName = $collectionName;        
+        $this->collectionName = $collectionName;
     }
-    
+
     public function getCollectionName() {
         // Просто возвращаем имя коллекции.
         // Данное поле всегда будет содержать какие-то данные, т.к. без имени
         // класс не будет создан (не отработает конструктор).
         return $this->collectionName;        
     }
-    
+
     private function setSearchStr($searchStr) {
         $this->searchStr = $searchStr;
     }
-    
+
     private function setSearchStr2($searchStr2) {
         $this->searchStr2 = $searchStr2;
     }
     
-    function __construct($dbHost, $dbName, $collectionName, $searchMethod, $searchStr, $searchStr2 = null, $limit = 10) {
+    function __construct($dbHost, $dbName, $dbUser, $dbPassword, $collectionName, $searchMethod, $searchStr, $searchStr2 = null, $limit = 10) {
         $this->setDBHost($dbHost); // Заполняем хост БД
         $this->setDBName($dbName); // Заполняем имя БД
         $this->setCollectionName($collectionName); // Заполняем имя коллекции в БД
         $this->setSearchMethod($searchMethod); // Заполняем метод поиска
-        $this->setSearchStr($searchStr);
-        
+        $this->setSearchStr($searchStr);        
         $this->setSearchStr2($searchStr2);
         $this->getQuery();        
         $this->limitResults = $limit;
         
         try {
-            $server = new MongoClient("mongodb://{$this->dbHost}");
+            $server = new MongoClient("mongodb://{$this->dbHost}", array("db" => $dbName, "username" => $dbUser, "password" => $dbPassword));
             $this->collection = $server->$dbName->$collectionName;                
             $this->doSearch();
         } catch (MongoConnectionException $ex) {
+	    echo $ex->getMessage();
             $this->errors[] = 'Ошибка подключения к базе:' . $ex->getMessage();
         }
     }
-    
+
     private function getQuery() {
         switch ($this->searchMethod) {
             case "ip":
