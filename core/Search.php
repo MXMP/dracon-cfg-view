@@ -3,7 +3,7 @@ require_once 'core/unixDateRange.php';
 
 class Search {
     private $cursor;
-    private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true];
+    private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true, 'target'=>true];
     private $collectionName;
     private $limitResults;
     private $query;
@@ -102,7 +102,11 @@ class Search {
     private function getQuery() {
         switch ($this->searchMethod) {
             case "ip":
-                $this->query = array('ip' => ip2long($this->searchStr));
+                $this->query = array('$or' => array(
+                    array('ip' => ip2long($this->searchStr)),
+                    array('target' => ip2long($this->searchStr))
+                ));
+                //$this->query = array('ip' => ip2long($this->searchStr));
                 break;
             case "hash":
                 $this->query = array('hash' => $this->searchStr);
@@ -122,20 +126,34 @@ class Search {
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
     }
     
-    public function getResultsTable($formAction = "Diff.php") {
+    public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
         if ($this->cursor->count() != 0) {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
                 Результаты поиска (последние '.  $this->limitResults.')</div><table 
-                class="table table-hover"><tr><th>ip-адрес</th><th>Дата загрузки</th>
-                <th>Хэш</th><th>Сравнение*</th></tr><tr>';
+                class="table table-hover"><tr><th>ip-адрес</th>';
+            if ($fromUp == "yes") {
+                echo '<th>target</th>';
+            }
+            echo '<th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
             foreach($this->cursor as $document) {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
+                if ($fromUp == "yes") {
+                    $target = long2ip($document["target"]);
+                    echo "<td><a href=telnet://".$target.">".$target."</td>";
+                }
                 echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
-                echo "<td><a href=ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                if ($fromUp == "yes") {
+                    echo "<td><a href=ShowConfig.php?from_up=yes&hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                } else {
+                    echo "<td><a href=ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                }
                 echo '<td align="center"><input type=checkbox name= hash[] value='.$document["hash"].' /></td></tr>';
-            }            
+            }
+            if ($fromUp == "yes") {
+                echo '<input type="hidden" name="from_up" value="yes" />';
+            }
             echo '<tr><td colspan="4" align="right"><input type="submit" 
                 class="btn btn-primary" value="Сравнить" name="make_diff" 
                 disabled="true" /></td></tr></table></div></form><script 

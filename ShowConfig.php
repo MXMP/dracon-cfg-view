@@ -9,7 +9,11 @@ $dbName           = $AppSettings->get('dbName');
 $dbUser		  = $AppSettings->get('dbUser');
 $dbPassword	  = $AppSettings->get('dbPassword');
 
-$dbCollectionName = $AppSettings->get('dbCollectionName');
+if(!array_key_exists("from_up", $_GET)) {
+    $dbCollectionName = $AppSettings->get('dbCollectionName');        
+} else {    
+    $dbCollectionName = $AppSettings->get('dbUpCollectionName');
+}
 
 $input_hash = $_GET["hash"];
 

@@ -12,12 +12,20 @@ $dbHost           = $AppSettings->get('dbHost');
 $dbName           = $AppSettings->get('dbName');
 $dbUser		  = $AppSettings->get('dbUser');
 $dbPassword	  = $AppSettings->get('dbPassword');
-$dbCollectionName = $AppSettings->get('dbCollectionName');
+// Дергаем из настроек имя коллекции в зависимости от установленной галки
+// поиска по загруженным конфигам
+if(!array_key_exists("from_up", $_POST)) {
+    $fromUpFlag = "no";
+    $dbCollectionName = $AppSettings->get('dbCollectionName');
+} else {
+    $fromUpFlag = "yes";
+    $dbCollectionName = $AppSettings->get('dbUpCollectionName');
+}
 
 try {
     // Валидация данных
     $validator = new validationManager();
-    $validator->validate();
+    $validator->validate();    
     
     // Попытка выполнения ранее подготовленного запроса
     $flag = $validator->getSearchFlag();
@@ -28,7 +36,7 @@ try {
         $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                 $validator->getSearchStr());
     }
-    $new_search->getResultsTable();    
+    $new_search->getResultsTable($fromUpFlag);    
 } catch (AppBaseException $ex) {
     $ex->getHtmlPanel();
 }

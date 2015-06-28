@@ -12,7 +12,11 @@ $dbHost           = $AppSettings->get('dbHost');
 $dbName           = $AppSettings->get('dbName');
 $dbUser		  = $AppSettings->get('dbUser');
 $dbPassword	  = $AppSettings->get('dbPassword');
-$dbCollectionName = $AppSettings->get('dbCollectionName');
+if(!array_key_exists("from_up", $_POST)) {
+    $dbCollectionName = $AppSettings->get('dbCollectionName');
+} else {
+    $dbCollectionName = $AppSettings->get('dbUpCollectionName');
+}
 
 if (empty($_POST["hash"])) {
     echo "Скрипту не передано никаких параметров!";
