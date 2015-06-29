@@ -131,18 +131,13 @@ class Search {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
                 Результаты поиска (последние '.  $this->limitResults.')</div><table 
-                class="table table-hover"><tr><th>ip-адрес</th>';
-            if ($fromUp == "yes") {
-                echo '<th>target</th>';
-            }
-            echo '<th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
+                class="table table-hover"><tr><th>ip-адрес</th><th>target</th>
+                <th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
             foreach($this->cursor as $document) {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
-                if ($fromUp == "yes") {
-                    $target = long2ip($document["target"]);
-                    echo "<td><a href=telnet://".$target.">".$target."</td>";
-                }
+                $target = long2ip($document["target"]);
+                echo "<td><a href=telnet://".$target.">".$target."</td>";
                 echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
                 if ($fromUp == "yes") {
                     echo "<td><a href=ShowConfig.php?from_up=yes&hash=".$document["hash"].">".$document["hash"]."</a></td>";
