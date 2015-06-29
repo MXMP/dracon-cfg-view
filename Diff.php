@@ -26,8 +26,8 @@ if (empty($_POST["hash"])) {
         echo "Передано неверное количество параметров!";
         exit();
     } else {
-        $hash1 = $_POST["hash"][0];
-        $hash2 = $_POST["hash"][1];
+        $hash1 = $_POST["hash"][1];
+        $hash2 = $_POST["hash"][0];
     }
 }
 
