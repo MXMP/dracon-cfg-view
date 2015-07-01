@@ -1,6 +1,5 @@
 <?php
 require_once 'view/generalHeader.php';
-
 require_once 'core/AppExceptions.php';
 require_once 'core/Search.php';
 require_once 'core/validationManager.php';

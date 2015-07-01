@@ -3,7 +3,8 @@ require_once 'core/unixDateRange.php';
 
 class Search {
     private $cursor;
-    private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true, 'target'=>true];
+    private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true, 'target'=>true, 
+        'switch' => true];
     private $collectionName;
     private $limitResults;
     private $query;
@@ -131,13 +132,14 @@ class Search {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
                 Результаты поиска (последние '.  $this->limitResults.')</div><table 
-                class="table table-hover"><tr><th>ip-адрес</th><th>target</th>
-                <th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
+                class="table table-hover"><tr><th>ip клиента</th><th>ip устройства</th>
+                <th>Модель</th><th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
             foreach($this->cursor as $document) {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
                 $target = long2ip($document["target"]);
                 echo "<td><a href=telnet://".$target.">".$target."</td>";
+                echo "<td>" . $document["switch"] . "</td>";
                 echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
                 if ($fromUp == "yes") {
                     echo "<td><a href=ShowConfig.php?from_up=yes&hash=".$document["hash"].">".$document["hash"]."</a></td>";
@@ -149,7 +151,7 @@ class Search {
             if ($fromUp == "yes") {
                 echo '<input type="hidden" name="from_up" value="yes" />';
             }
-            echo '<tr><td colspan="4" align="right"><input type="submit" 
+            echo '<tr><td colspan="6" align="right"><input type="submit" 
                 class="btn btn-primary" value="Сравнить" name="make_diff" 
                 disabled="true" /></td></tr></table></div></form><script 
                 type="text/javascript" src="js/only_two2.js"></script><div 
@@ -161,5 +163,45 @@ class Search {
                 запросу ничего не найдено. <a href="index.php" 
                 class="alert-link">Повторите поиск.</a></div>';
         }
+    }
+    
+    public function getResults($fromUp = "no", $format = "json") {
+        if ($this->cursor->count() != 0) {
+            if ($format == "htmlTable") {
+                echo '<table><tr><th>ip клиента</th><th>ip устройства</th><th>Модель'
+                . '</th><th>Дата загрузки</th><th>Хэш</th></tr><tr>';
+                foreach($this->cursor as $document) {
+                    $ip = long2ip($document["ip"]);
+                    echo "<td><a href=telnet://".$ip.">".$ip."</td>";
+                    $target = long2ip($document["target"]);
+                    echo "<td><a href=telnet://".$target.">".$target."</td>";
+                    echo "<td>" . $document["switch"] . "</td>";
+                    echo "<td>".date('Y-m-d H:i:s', $document["date"])."</td>";
+                    if ($fromUp == "yes") {
+                        echo "<td><a href=http://switch.powernet/switch-config/ShowConfig.php?from_up=yes&hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                    } else {
+                        echo "<td><a href=http://switch.powernet/switch-config/ShowConfig.php?hash=".$document["hash"].">".$document["hash"]."</a></td>";
+                    }
+                    echo '</tr>';
+                }
+            } else if ($format == "json") {
+                $i = 1;
+                foreach ($this->cursor as $document) {
+                    $result_name = "result" . $i;
+                    $arr["ip"] = long2ip($document["ip"]);
+                    $arr["target"] = long2ip($document["target"]);
+                    $arr["switch"] = $document["switch"];
+                    $arr["date"] = date('Y-m-d H:i:s', $document["date"]);
+                    $arr["hash"] = $document["hash"];
+                    $output_array[$result_name] = $arr;
+                    $i++;
+                }
+                echo json_encode($output_array);
+            } else {
+                throw new AppBaseException("Invalid results format");
+            }
+        } else {
+            echo 'No results';
+        }            
     }
 }
