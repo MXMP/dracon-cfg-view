@@ -104,10 +104,9 @@ class Search {
         switch ($this->searchMethod) {
             case "ip":
                 $this->query = array('$or' => array(
-                    array('ip' => ip2long($this->searchStr)),
-                    array('target' => ip2long($this->searchStr))
+                    array('ip' => (float) sprintf("%u", ip2long($this->searchStr))),
+                    array('target' => (float) sprintf("%u", ip2long($this->searchStr)))
                 ));
-                //$this->query = array('ip' => ip2long($this->searchStr));
                 break;
             case "hash":
                 $this->query = array('hash' => $this->searchStr);
