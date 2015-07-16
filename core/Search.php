@@ -6,7 +6,7 @@ class Search {
     private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true, 'target'=>true, 
         'switch' => true];
     private $collectionName;
-    private $limitResults;
+    private $limitResults = 10;
     private $query;
     private $errors = [];
     private $searchMethod = "ip";
@@ -80,7 +80,7 @@ class Search {
         $this->searchStr2 = $searchStr2;
     }
     
-    function __construct($dbHost, $dbName, $dbUser, $dbPassword, $collectionName, $searchMethod, $searchStr, $searchStr2 = null, $limit = 10) {
+    function __construct($dbHost, $dbName, $dbUser, $dbPassword, $collectionName, $searchMethod, $searchStr, $searchStr2 = null) {
         $this->setDBHost($dbHost); // Заполняем хост БД
         $this->setDBName($dbName); // Заполняем имя БД
         $this->setCollectionName($collectionName); // Заполняем имя коллекции в БД
@@ -88,12 +88,10 @@ class Search {
         $this->setSearchStr($searchStr);        
         $this->setSearchStr2($searchStr2);
         $this->getQuery();        
-        $this->limitResults = $limit;
         
         try {
             $server = new MongoClient("mongodb://{$this->dbHost}", array("db" => $dbName, "username" => $dbUser, "password" => $dbPassword));
-            $this->collection = $server->$dbName->$collectionName;                
-            $this->doSearch();
+            $this->collection = $server->$dbName->$collectionName;                            
         } catch (MongoConnectionException $ex) {
 	    echo $ex->getMessage();
             $this->errors[] = 'Ошибка подключения к базе:' . $ex->getMessage();
@@ -123,7 +121,10 @@ class Search {
         }
     }
     
-    private function doSearch() {
+    public function doSearch($limit = NULL) {
+        if ($limit !== NULL) {
+            $this->setLimitResults($limit);
+        }
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
     }
     
@@ -203,5 +204,14 @@ class Search {
         } else {
             echo 'No results';
         }            
+    }
+    
+    private function setLimitResults($limit) {
+        $limit = (integer) $limit;
+        if (gettype($limit) !== "integer") {
+            throw new AppBaseException("Wrong value of limit parameter");
+        } else {
+            $this->limitResults = $limit;
+        }
     }
 }

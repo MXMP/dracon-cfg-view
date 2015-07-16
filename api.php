@@ -44,7 +44,15 @@ if (empty($_GET)) {
         } else {
             $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                     $apiValidator->getSearchStr());
-        }        
+        }
+        
+        // Если прилетел параметр "limitResults", устанавливаем его и выполняем
+        // поиск, иначе действуем со стандартными параметрами
+        if (array_key_exists("limitResults", $_GET)) {
+            $new_search->doSearch($_GET["limitResults"]);
+        } else {
+            $new_search->doSearch();
+        }
     } catch (AppBaseException $e) {
         echo 'Error: ' . $e->getMessage();
     }

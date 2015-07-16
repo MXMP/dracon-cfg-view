@@ -35,6 +35,7 @@ try {
         $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                 $validator->getSearchStr());
     }
+    $new_search->doSearch();
     $new_search->getResultsTable($fromUpFlag);    
 } catch (AppBaseException $ex) {
     $ex->getHtmlPanel();

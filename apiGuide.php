@@ -64,5 +64,11 @@
         <code>htmlTable</code>. В ответ получим вот такое 
         <a href="http://switch.powernet/switch-config/api.php?searchMethod=ipHash&search_input=10.99.192.19&format=htmlTable">чудо</a>.
     </p>
+    <p>
+        По-умолчанию ответ от сервера содержит максимум 10 результатов. Соответственно,
+        если <strong>нам нужно БОЛЬШЕ РЕЗУЛЬТАТОВ</strong>, то нужно послать
+        параметр <code>limitResults</code>, установив в него количество нужных
+        результатов.
+    </p>
 
 <?php require_once 'view/generalFooter.php'; ?>
