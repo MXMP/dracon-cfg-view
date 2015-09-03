@@ -1,5 +1,6 @@
 <?php
 require_once 'core/unixDateRange.php';
+require_once 'core/Paginator.php';
 
 class Search {
     private $cursor;
@@ -16,6 +17,7 @@ class Search {
     private $collection;
     private $searchStr;
     private $searchStr2;
+    private $count;
 
     private function setSearchMethod($searchMethod) {
         // Сверяем переданный метод поиска с массивом эталонных значений.
@@ -126,13 +128,21 @@ class Search {
             $this->setLimitResults($limit);
         }
         $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
+        $this->count = $this->cursor->count();
     }
     
     public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
-        if ($this->cursor->count() != 0) {
+        if ($this->cursor->count() != 0) {            
+            $paginator = new Paginator($this->count, $this->limitResults);
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
-                Результаты поиска (последние '.  $this->limitResults.')</div><table 
+                Результаты поиска ';
+            if ($this->count > $this->limitResults) {
+                echo '(отображено '.  $this->limitResults.' из '.$this->count.')';
+            } else {
+                echo "({$this->count})";
+            }
+            echo '</div><table 
                 class="table table-hover"><tr><th>ip клиента</th><th>ip устройства</th>
                 <th>Модель</th><th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
             foreach($this->cursor as $document) {
@@ -154,7 +164,12 @@ class Search {
             }
             echo '<tr><td colspan="6" align="right"><input type="submit" 
                 class="btn btn-primary" value="Сравнить" name="make_diff" 
-                disabled="true" /></td></tr></table></div></form><script 
+                disabled="true" /></td></tr><tr><td colspan="6" align="center">';
+            
+            // отрисовываем представление пагинатора
+            $paginator->getUI(1, "mongo.php");
+            
+            echo '</td></tr></table></div></form><script 
                 type="text/javascript" src="js/only_two2.js"></script><div 
                 class="alert alert-info" role="alert">* Для сравнения можно 
                 отметить только две версии конфигурации. Это жесткое правило 
