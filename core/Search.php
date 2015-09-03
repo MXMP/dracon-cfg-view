@@ -123,22 +123,22 @@ class Search {
         }
     }
     
-    public function doSearch($limit = NULL) {
+    public function doSearch($limit = NULL, $skip = 0) {
         if ($limit !== NULL) {
             $this->setLimitResults($limit);
         }
-        $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
+        $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->skip($skip)->sort(array('date' => -1));
         $this->count = $this->cursor->count();
     }
     
     public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
         if ($this->cursor->count() != 0) {            
-            $paginator = new Paginator($this->count, $this->limitResults);
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
                 Результаты поиска ';
             if ($this->count > $this->limitResults) {
                 echo '(отображено '.  $this->limitResults.' из '.$this->count.')';
+                $paginator = new Paginator($this->count, $this->limitResults);
             } else {
                 echo "({$this->count})";
             }
@@ -164,12 +164,17 @@ class Search {
             }
             echo '<tr><td colspan="6" align="right"><input type="submit" 
                 class="btn btn-primary" value="Сравнить" name="make_diff" 
-                disabled="true" /></td></tr><tr><td colspan="6" align="center">';
+                disabled="true" /></td></tr>';
             
-            // отрисовываем представление пагинатора
-            $paginator->getUI(1, "mongo.php");
+            // отрисовываем представление пагинатора, если объект пагинатора
+            // определен
+            if (isset($paginator)) {
+                echo '<tr><td colspan="6" align="center">';
+                $paginator->getUI(1, "mongo.php");
+                echo '</td></tr>';
+            }            
             
-            echo '</td></tr></table></div></form><script 
+            echo '</table></div></form><script 
                 type="text/javascript" src="js/only_two2.js"></script><div 
                 class="alert alert-info" role="alert">* Для сравнения можно 
                 отметить только две версии конфигурации. Это жесткое правило 
