@@ -14,21 +14,24 @@ class validationManager {
             case "get":
                 $this->input_array = INPUT_GET;
                 break;
+            case "session":
+                $this->input_array = $_SESSION;
+                break;
             default :
                 throw new AppBaseException("Неправильный метод в запросе!");
         }
     }
     
     public function validate() {
-        if (!filter_has_var($this->input_array, 'searchMethod')) {
+        if (!array_key_exists('searchMethod', $this->input_array)) {
             throw new AppBaseException("Пустой запрос, задайте параметры для поиска. "
                     . "Скорее всего вы не выбрали метод поиска (шелкните на "
                     . "кружок возле необходимого поля).");
-        } else if (filter_input($this->input_array, 'searchMethod') == 'ipHash') {
+        } else if (filter_var($this->input_array['searchMethod']) == 'ipHash') {
             $this->validateIpHash();
-        } else if (filter_input($this->input_array, 'searchMethod') == 'oneDay') {
+        } else if (filter_var($this->input_array['searchMethod']) == 'oneDay') {
             $this->validateOneDay();
-        } else if (filter_input($this->input_array, 'searchMethod') == 'dateRange') {
+        } else if (filter_var($this->input_array['searchMethod']) == 'dateRange') {
             $this->validateDateRange();
         } else {
             throw new AppBaseException("Введены неправильные данные или не соблюден "
@@ -52,7 +55,7 @@ class validationManager {
         // Поиск по ip-адресу или хэшу
 
         // Получаем входную строку и тут же очищаем ее от всяких примесей,
-        $clear_str = filter_input($this->input_array, "search_input", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $clear_str = filter_var($this->input_array["search_input"], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$this->search_str = $clear_str;
 
         // анализируем строку и пытаемся выяснить по чему искать
@@ -74,10 +77,10 @@ class validationManager {
         // Поиск за один день.
         $this->search_flag = 'oneDay';
         // Проверка на пустой ввод.
-        if (filter_input($this->input_array, 'oneDayDate') == '') {
+        if (filter_var($this->input_array['oneDayDate']) == '') {
             throw new AppBaseException("Вы не ввели данные для поиска.");
         } else {
-            $this->search_str = filter_input($this->input_array, 'oneDayDate');
+            $this->search_str = filter_var($this->input_array['oneDayDate']);
         }
     }
     
@@ -85,11 +88,11 @@ class validationManager {
         // Поиск по диапазону дат.
         $this->search_flag = 'dateRange';
         // Проверка на пустой ввод.
-        if (filter_input($this->input_array, 'dateRangeStart') == '' || filter_input($this->input_array, 'dateRangeEnd') == '') {
+        if (filter_var($this->input_array['dateRangeStart']) == '' || filter_var($this->input_array['dateRangeEnd']) == '') {
             throw new AppBaseException("Вы не ввели данные для поиска.");
         } else {
-            $this->search_str = filter_input($this->input_array, 'dateRangeStart');
-            $this->search_str2 = filter_input($this->input_array, 'dateRangeEnd');
+            $this->search_str = filter_var($this->input_array['dateRangeStart']);
+            $this->search_str2 = filter_var($this->input_array['dateRangeEnd']);
         }
     }
 }
