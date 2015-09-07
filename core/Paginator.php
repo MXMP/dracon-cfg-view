@@ -43,13 +43,8 @@ class Paginator {
                 //Дальше идёт вывод Pagination 
                 echo '<ul class="pagination">';
                 if ($currentPage != 1) {
-                    echo "<li><a href=\"{$linkPage}\" title=\"Первая страница\"><span aria-hidden=\"true\">&laquo;</span><span aria-hidden=\"true\">&laquo;</span></a></li>";
-
-                    if ($currentPage == 2) {
-                        $test_str = $linkPage;          
-                    } else {
-                        $test_str = $url_page.($currentPage - 1);          
-                    }
+                    echo "<li><a href=\"{$url_page}1\" title=\"Первая страница\"><span aria-hidden=\"true\">&laquo;</span><span aria-hidden=\"true\">&laquo;</span></a></li>";
+                    $test_str = $url_page.($currentPage - 1);
 
                     echo "<li><a href=\"$test_str\" title=\"Предыдущая страница\"><span aria-hidden=\"true\">&laquo;</span></a></li>";
                 }
@@ -58,11 +53,7 @@ class Paginator {
                     if ($i == $currentPage) { 
                         echo "<li class=\"active\"><span>{$i}</span></li>";           
                     } else {
-                        if ($i == 1) {
-                            $test_str2 = $linkPage;            
-                        } else {
-                            $test_str2 = $url_page.$i;            
-                        }
+                        $test_str2 = $url_page.$i;            
                         echo "<li><a href=\"{$test_str2}\">{$i}</a></li>";
                     }
                 }
