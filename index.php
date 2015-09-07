@@ -37,26 +37,9 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="panel panel-success">
-                            <div class="panel-body">
-                                <input class="form-control" type="radio" name="searchMethod" value="oneDay">
-                                <div class="input-group date" id="datepickerOneDay">
-                                    <input type="text" class="form-control" name="oneDayDate" readonly />
-                                    <span class="input-group-addon">
-                                        <i class="glyphicon glyphicon-th"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                <strong>Поиск за один день</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <div class="panel panel-info">
                             <div class="panel-body">
-                                <input class="form-control" type="radio" name="searchMethod" value="dateRange">
+                                <input class="form-control" type="radio" name="searchMethod" value="dateRange" checked="checked">
                                 <div class="input-group input-daterange" id="datepickerRange">
                                     <input type="text"  class="form-control" name="dateRangeStart" readonly />
                                     <span class="input-group-addon">до</span>
