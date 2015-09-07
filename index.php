@@ -41,9 +41,9 @@
                             <div class="panel-body">
                                 <input class="form-control" type="radio" name="searchMethod" value="dateRange" checked="checked">
                                 <div class="input-group input-daterange" id="datepickerRange">
-                                    <input type="text"  class="form-control" name="dateRangeStart" readonly />
+                                    <input type="text"  class="form-control" name="dateRangeStart" readonly value="<?php echo date("d.m.Y"); ?>" />
                                     <span class="input-group-addon">до</span>
-                                    <input type="text"  class="form-control" name="dateRangeEnd" readonly />
+                                    <input type="text"  class="form-control" name="dateRangeEnd" readonly value="<?php echo date("d.m.Y"); ?>" />
                                 </div>
                             </div>
                             <div class="panel-footer">
