@@ -1,9 +1,16 @@
 <?php
+session_start();
+
+foreach ($_POST as $key => $val) {
+    $_SESSION[$key] = $val;
+}
+
 require_once 'view/generalHeader.php';
 require_once 'core/AppExceptions.php';
 require_once 'core/Search.php';
 require_once 'core/validationManager.php';
 require_once 'core/AppSettings.php';
+require_once 'core/Paginator.php';
 
 // получаем настройки приложения
 $AppSettings = AppSettings::getInstance();
@@ -23,7 +30,7 @@ if(!array_key_exists("from_up", $_POST)) {
 
 try {
     // Валидация данных
-    $validator = new validationManager();
+    $validator = new validationManager("session");
     $validator->validate();    
     
     // Попытка выполнения ранее подготовленного запроса
@@ -35,8 +42,26 @@ try {
         $new_search = new Search($dbHost, $dbName, $dbUser, $dbPassword, $dbCollectionName, $flag, 
                 $validator->getSearchStr());
     }
-    $new_search->doSearch(50);
-    $new_search->getResultsTable($fromUpFlag);    
+    $new_search->doSearch();
+    
+    $paginator = new Paginator($new_search->getCount(), $new_search->getLimitResults());
+    $numbers = $paginator->getNumbers($_SESSION['currentPage']);
+    $new_search->doSearch(null, $numbers['startNum']);
+    
+    $new_search->getResultsTable($fromUpFlag);
+        
+    if (isset($_GET['currentPage'])) {
+        $_SESSION['currentPage'] = $_GET['currentPage'];
+    }
+    
+    echo '<center>';
+    if (array_key_exists('currentPage', $_SESSION)) {
+        $paginator->getUI($_SESSION['currentPage'], "mongo.php", 10);        
+    } else {
+        $paginator->getUI(1, "mongo.php", 10);       
+    }
+    echo '</center>';
+        
 } catch (AppBaseException $ex) {
     $ex->getHtmlPanel();
 }

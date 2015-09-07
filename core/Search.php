@@ -1,6 +1,5 @@
 <?php
 require_once 'core/unixDateRange.php';
-require_once 'core/Paginator.php';
 
 class Search {
     private $cursor;
@@ -82,7 +81,32 @@ class Search {
         $this->searchStr2 = $searchStr2;
     }
     
-    function __construct($dbHost, $dbName, $dbUser, $dbPassword, $collectionName, $searchMethod, $searchStr, $searchStr2 = null) {
+    public function getCount() {
+        return $this->count;
+    }
+    
+    private function setLimitResults($limit) {
+        $limit = (integer) $limit;
+        if (gettype($limit) !== "integer") {
+            throw new AppBaseException("Wrong value of limit parameter");
+        } else {
+            $this->limitResults = $limit;
+        }
+    }
+    
+    public function getLimitResults() {
+        return $this->limitResults;
+    }
+    
+    function __construct(
+            $dbHost, 
+            $dbName, 
+            $dbUser, 
+            $dbPassword, 
+            $collectionName, 
+            $searchMethod, 
+            $searchStr, 
+            $searchStr2 = null) {
         $this->setDBHost($dbHost); // Заполняем хост БД
         $this->setDBName($dbName); // Заполняем имя БД
         $this->setCollectionName($collectionName); // Заполняем имя коллекции в БД
@@ -138,7 +162,6 @@ class Search {
                 Результаты поиска ';
             if ($this->count > $this->limitResults) {
                 echo '(отображено '.  $this->limitResults.' из '.$this->count.')';
-                $paginator = new Paginator($this->count, $this->limitResults);
             } else {
                 echo "({$this->count})";
             }
@@ -164,17 +187,7 @@ class Search {
             }
             echo '<tr><td colspan="6" align="right"><input type="submit" 
                 class="btn btn-primary" value="Сравнить" name="make_diff" 
-                disabled="true" /></td></tr>';
-            
-            // отрисовываем представление пагинатора, если объект пагинатора
-            // определен
-            if (isset($paginator)) {
-                echo '<tr><td colspan="6" align="center">';
-                $paginator->getUI(1, "mongo.php");
-                echo '</td></tr>';
-            }            
-            
-            echo '</table></div></form><script 
+                disabled="true" /></td></tr></table></div></form><script 
                 type="text/javascript" src="js/only_two2.js"></script><div 
                 class="alert alert-info" role="alert">* Для сравнения можно 
                 отметить только две версии конфигурации. Это жесткое правило 
@@ -226,12 +239,4 @@ class Search {
         }            
     }
     
-    private function setLimitResults($limit) {
-        $limit = (integer) $limit;
-        if (gettype($limit) !== "integer") {
-            throw new AppBaseException("Wrong value of limit parameter");
-        } else {
-            $this->limitResults = $limit;
-        }
-    }
 }
