@@ -1,6 +1,6 @@
 <?php require_once 'view/generalHeader.php'; ?>
 
-            <link id="bsdp-css" href="bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+<link id="bsdp-css" href="bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
 
             <p>
                 Сервис позволяет получить информацию о том, когда и какой
