@@ -16,6 +16,7 @@ class Search {
     private $collection;
     private $searchStr;
     private $searchStr2;
+    private $count;
 
     private function setSearchMethod($searchMethod) {
         // Сверяем переданный метод поиска с массивом эталонных значений.
@@ -80,7 +81,32 @@ class Search {
         $this->searchStr2 = $searchStr2;
     }
     
-    function __construct($dbHost, $dbName, $dbUser, $dbPassword, $collectionName, $searchMethod, $searchStr, $searchStr2 = null) {
+    public function getCount() {
+        return $this->count;
+    }
+    
+    private function setLimitResults($limit) {
+        $limit = (integer) $limit;
+        if (gettype($limit) !== "integer") {
+            throw new AppBaseException("Wrong value of limit parameter");
+        } else {
+            $this->limitResults = $limit;
+        }
+    }
+    
+    public function getLimitResults() {
+        return $this->limitResults;
+    }
+    
+    function __construct(
+            $dbHost, 
+            $dbName, 
+            $dbUser, 
+            $dbPassword, 
+            $collectionName, 
+            $searchMethod, 
+            $searchStr, 
+            $searchStr2 = null) {
         $this->setDBHost($dbHost); // Заполняем хост БД
         $this->setDBName($dbName); // Заполняем имя БД
         $this->setCollectionName($collectionName); // Заполняем имя коллекции в БД
@@ -121,18 +147,25 @@ class Search {
         }
     }
     
-    public function doSearch($limit = NULL) {
+    public function doSearch($limit = NULL, $skip = 0) {
         if ($limit !== NULL) {
             $this->setLimitResults($limit);
         }
-        $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->sort(array('date' => -1));
+        $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->skip($skip)->sort(array('date' => -1));
+        $this->count = $this->cursor->count();
     }
     
     public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
-        if ($this->cursor->count() != 0) {
+        if ($this->cursor->count() != 0) {            
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
-                Результаты поиска (последние '.  $this->limitResults.')</div><table 
+                Результаты поиска ';
+            if ($this->count > $this->limitResults) {
+                echo '(отображено '.  $this->limitResults.' из '.$this->count.')';
+            } else {
+                echo "({$this->count})";
+            }
+            echo '</div><table 
                 class="table table-hover"><tr><th>ip клиента</th><th>ip устройства</th>
                 <th>Модель</th><th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
             foreach($this->cursor as $document) {
@@ -206,12 +239,4 @@ class Search {
         }            
     }
     
-    private function setLimitResults($limit) {
-        $limit = (integer) $limit;
-        if (gettype($limit) !== "integer") {
-            throw new AppBaseException("Wrong value of limit parameter");
-        } else {
-            $this->limitResults = $limit;
-        }
-    }
 }
