@@ -44,15 +44,17 @@ try {
     }
     $new_search->doSearch();
     
+    if (isset($_GET['currentPage'])) {
+        $_SESSION['currentPage'] = $_GET['currentPage'];
+    } else {
+        $_SESSION['currentPage'] = 1;
+    }
+    
     $paginator = new Paginator($new_search->getCount(), $new_search->getLimitResults());
     $numbers = $paginator->getNumbers($_SESSION['currentPage']);
     $new_search->doSearch(null, $numbers['startNum']);
     
-    $new_search->getResultsTable($fromUpFlag);
-        
-    if (isset($_GET['currentPage'])) {
-        $_SESSION['currentPage'] = $_GET['currentPage'];
-    }
+    $new_search->getResultsTable($fromUpFlag);        
     
     echo '<center>';
     if (array_key_exists('currentPage', $_SESSION)) {
