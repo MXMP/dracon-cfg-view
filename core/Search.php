@@ -3,8 +3,7 @@ require_once 'core/unixDateRange.php';
 
 class Search {
     private $cursor;
-    private $fields = ['ip'=>true, 'date'=>true, 'hash'=>true, 'target'=>true, 
-        'switch' => true];
+    private $fields = ['ip' => 1, 'date' => 1, 'hash' => 1, 'target' => 1, 'switch' => 1];
     private $collectionName;
     private $limitResults = 10;
     private $query;
@@ -17,6 +16,7 @@ class Search {
     private $searchStr;
     private $searchStr2;
     private $count;
+    private $resultArray;
 
     private function setSearchMethod($searchMethod) {
         // Сверяем переданный метод поиска с массивом эталонных значений.
@@ -116,9 +116,15 @@ class Search {
         $this->getQuery();        
         
         try {
-            $server = new MongoClient("mongodb://{$this->dbHost}", array("db" => $dbName, "username" => $dbUser, "password" => $dbPassword));
-            $this->collection = $server->$dbName->$collectionName;                            
-        } catch (MongoConnectionException $ex) {
+            $client = new MongoDB\Client(
+                "mongodb://{$this->dbHost}",
+                [
+                    "db" => $dbName,
+                    "username" => $dbUser,
+                    "password" => $dbPassword]
+            );
+            $this->collection = $client->selectCollection($dbName, $collectionName);
+        } catch (MongoDB\Driver\Exception\RuntimeException $ex) {
 	    echo $ex->getMessage();
             $this->errors[] = 'Ошибка подключения к базе:' . $ex->getMessage();
         }
@@ -128,10 +134,12 @@ class Search {
         switch ($this->searchMethod) {
             case "ip":
                 $longip = (float) sprintf("%u", ip2long($this->searchStr));
-                $this->query = array('$or' => array(
-                    array('ip' => $longip),
-                    array('target' => $longip)
-                ));
+                $this->query = [
+                    '$or' => [
+                        ['ip' => $longip],
+                        ['target' => $longip]
+                    ]
+                ];
                 break;
             case "hash":
                 $this->query = array('hash' => $this->searchStr);
@@ -151,12 +159,23 @@ class Search {
         if ($limit !== NULL) {
             $this->setLimitResults($limit);
         }
-        $this->cursor = $this->collection->find($this->query, $this->fields)->limit($this->limitResults)->skip($skip)->sort(array('date' => -1));
-        $this->count = $this->cursor->count();
+        $this->cursor = $this->collection->find(
+            $this->query,
+            [
+                'projection' => $this->fields,
+                'limit' => $this->limitResults,
+                'skip' => $skip,
+                'sort' => [
+                    'date' => -1
+                ]
+            ]
+        );
+        $this->resultArray = $this->cursor->toArray();
+        $this->count = count($this->resultArray);
     }
     
     public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
-        if ($this->cursor->count() != 0) {            
+        if ($this->count != 0) {
             echo '<form action="'.$formAction.'" method="post"><div 
                 class="panel panel-default"><div class="panel-heading">
                 Результаты поиска ';
@@ -168,7 +187,7 @@ class Search {
             echo '</div><table 
                 class="table table-hover"><tr><th>ip клиента</th><th>ip устройства</th>
                 <th>Модель</th><th>Дата загрузки</th><th>Хэш</th><th>Сравнение*</th></tr><tr>';
-            foreach($this->cursor as $document) {
+            foreach ($this->resultArray as $document) {
                 $ip = long2ip($document["ip"]);
                 echo "<td><a href=telnet://".$ip.">".$ip."</td>";
                 $target = long2ip($document["target"]);
