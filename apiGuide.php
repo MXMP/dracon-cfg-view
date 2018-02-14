@@ -9,7 +9,7 @@
 </p>
 <p>
     Итак, что бы запрашивать данные нужно слать GET-запросы на URL: 
-    <code>http://switch.powernet/switch-config/api.php</code>
+    <code>http://configs.localhost/api.php</code>
 </p>
 
 <h2>Варианты использования</h2>
@@ -21,7 +21,7 @@
     </ul>
     <p>
         <strong>Пример:</strong>
-        <code>http://switch.powernet/switch-config/api.php?searchMethod=ipHash&AMP;search_input=10.99.192.19</code>
+        <code>http://configs.localhost/api.php?searchMethod=ipHash&AMP;search_input=10.99.192.19</code>
     </p>
 
 <h3>Поиск за один день</h3>
@@ -32,7 +32,7 @@
     </ul>
     <p>
         <strong>Пример:</strong>
-        <code>http://switch.powernet/switch-config/api.php?searchMethod=oneDay&AMP;oneDayDate=01.07.2015</code>
+        <code>http://configs.localhost/api.php?searchMethod=oneDay&AMP;oneDayDate=01.07.2015</code>
     </p>
 
 <h3>Поиск в диапазоне дат</h3>
@@ -44,7 +44,7 @@
     </ul>
     <p>
         <strong>Пример:</strong>
-        <code>http://switch.powernet/switch-config/api.php?searchMethod=dateRange&AMP;dateRangeStart=01.06.2015&AMP;dateRangeEnd=01.07.2015</code>
+        <code>http://configs.localhost/api.php?searchMethod=dateRange&AMP;dateRangeStart=01.06.2015&AMP;dateRangeEnd=01.07.2015</code>
     </p>
     
 <h2>Кастомизация</h2>
@@ -62,7 +62,7 @@
         Если хочется получить на выходе не JSON, а простую HTML-табличку, то
         добавляем в запрос параметр <code>format</code> и устанавливаем ему значение
         <code>htmlTable</code>. В ответ получим вот такое 
-        <a href="http://switch.powernet/switch-config/api.php?searchMethod=ipHash&search_input=10.99.192.19&format=htmlTable">чудо</a>.
+        <a href="http://configs.localhost/api.php?searchMethod=ipHash&search_input=10.99.192.19&format=htmlTable">чудо</a>.
     </p>
     <p>
         По-умолчанию ответ от сервера содержит максимум 10 результатов. Соответственно,

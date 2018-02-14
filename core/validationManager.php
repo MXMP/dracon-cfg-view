@@ -11,10 +11,10 @@ class validationManager
     {
         switch ($method) {
             case "post":
-                $this->input_array = INPUT_POST;
+                $this->input_array = $_POST;
                 break;
             case "get":
-                $this->input_array = INPUT_GET;
+                $this->input_array = $_GET;
                 break;
             case "session":
                 $this->input_array = $_SESSION;

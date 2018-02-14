@@ -1,5 +1,6 @@
 <?php
 require_once 'core/unixDateRange.php';
+require_once 'vendor/autoload.php';
 
 class Search {
     private $cursor;
@@ -239,7 +240,7 @@ class Search {
                 }
             } else if ($format == "json") {
                 $i = 1;
-                foreach ($this->cursor as $document) {
+                foreach ($this->resultArray as $document) {
                     $result_name = "result" . $i;
                     $arr["ip"] = long2ip($document["ip"]);
                     $arr["target"] = long2ip($document["target"]);
