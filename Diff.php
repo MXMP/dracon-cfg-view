@@ -3,7 +3,7 @@ require_once 'view/generalHeader.php';
 require 'vendor/autoload.php';
 ?>
 
-    <link rel="stylesheet" type="text/css" href="css/diff.css">
+    <link rel="stylesheet" type="text/css" href="/css/diff.css">
 
 <?php
 require_once 'core/AppSettings.php';

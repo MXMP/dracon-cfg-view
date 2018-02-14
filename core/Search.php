@@ -171,7 +171,7 @@ class Search {
             ]
         );
         $this->resultArray = $this->cursor->toArray();
-        $this->count = count($this->resultArray);
+        $this->count = $this->collection->count($this->query);
     }
     
     public function getResultsTable($fromUp = "no", $formAction = "Diff.php") {
@@ -219,7 +219,7 @@ class Search {
     }
     
     public function getResults($fromUp = "no", $format = "json") {
-        if ($this->cursor->count() != 0) {
+        if ($this->count != 0) {
             if ($format == "htmlTable") {
                 echo '<table><tr><th>ip клиента</th><th>ip устройства</th><th>Модель'
                 . '</th><th>Дата загрузки</th><th>Хэш</th></tr><tr>';

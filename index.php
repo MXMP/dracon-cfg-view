@@ -1,6 +1,6 @@
 <?php require_once 'view/generalHeader.php'; ?>
 
-<link id="bsdp-css" href="bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
+<link id="bsdp-css" href="/vendor/eternicode/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
 
             <p>
                 Сервис позволяет получить информацию о том, когда и какой
@@ -64,8 +64,8 @@
             </form>
 
         <!-- JavaScript for DatePicker -->
-        <script src="bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-        <script src="bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js" charset="UTF-8"></script>
-        <script src="js/datePicker_main.js"></script>
+        <script src="/vendor/eternicode/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <script src="/vendor/eternicode/bootstrap-datepicker/dist/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
+        <script src="/js/datePicker_main.js"></script>
             
 <?php require_once 'view/generalFooter.php'; ?>
